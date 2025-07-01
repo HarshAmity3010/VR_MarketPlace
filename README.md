@@ -1,4 +1,65 @@
-# `VR_MarketPlace`
+
+# VR_MarketPlace
+
+## Project Overview
+
+VR_MarketPlace is a decentralized marketplace for VR assets built on the Internet Computer (ICP). It allows users to create, list, buy, and manage VR assets using blockchain technology, with secure authentication and a modern web frontend.
+
+## Features
+
+- User authentication via Internet Identity (ICP)
+- Create and list new VR assets with name, description, price, and image
+- Buy and sell VR assets (ownership transfer)
+- List assets for sale and remove from sale
+- Delete owned assets
+- View all assets in grid or list view
+- Sort assets by price (low-high, high-low) or newest
+- Responsive and modern UI (React + Vite)
+- Rust-based backend canister for asset management
+- Secure principal-based ownership and transactions
+
+## Technology Stack
+
+### Frontend
+- React 18
+- Vite (build tool)
+- TypeScript (type safety)
+- Sass (styling)
+- @dfinity/agent, @dfinity/auth-client, @dfinity/candid (ICP integration)
+- Internet Identity for authentication
+- Vitest, Testing Library (testing)
+
+### Backend (Canister)
+- Rust (main logic)
+- ic-cdk, ic-cdk-macros (ICP smart contract SDK)
+- Candid (IDL for canister interface)
+- serde (serialization)
+
+### DevOps & Tooling
+- DFX (Internet Computer SDK)
+- Node.js & npm (package management)
+- Workspace monorepo structure
+
+## How to Run
+
+1. Install DFX, Node.js, and npm (see ICP docs)
+2. Clone this repo and run `npm install` in the root and frontend folder
+3. Start the local replica: `dfx start --clean`
+4. Deploy canisters: `dfx deploy`
+5. Start the frontend: `npm run start --workspace VR_MarketPlace_frontend`
+6. Open the app at `http://localhost:3000` (or the port shown)
+
+## Canister Interface (Candid)
+
+See `src/VR_MarketPlace_backend/VR_MarketPlace_backend.did` for the full service interface, including:
+- greet
+- create_asset
+- list_assets
+- buy_asset
+- list_for_sale
+- delete_asset
+
+---
 
 Welcome to your new `VR_MarketPlace` project and to the Internet Computer development community. By default, creating a new project adds this README and some template files to your project directory. You can edit these template files to customize your project and to include your own code to speed up the development cycle.
 
@@ -27,7 +88,7 @@ If you want to test your project locally, you can use the following commands:
 
 ```bash
 # Starts the replica, running in the background
-dfx start --background
+dfx start --clean
 
 # Deploys your canisters to the replica and generates your candid interface
 dfx deploy
