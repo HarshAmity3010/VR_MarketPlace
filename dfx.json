@@ -1,0 +1,38 @@
+{
+  "canisters": {
+    "VR_MarketPlace_backend": {
+      "candid": "src/VR_MarketPlace_backend/VR_MarketPlace_backend.did",
+      "package": "VR_MarketPlace_backend",
+      "type": "rust"
+    },
+    "VR_MarketPlace_frontend": {
+      "dependencies": [
+        "VR_MarketPlace_backend"
+      ],
+      "source": [
+        "src/VR_MarketPlace_frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "VR_MarketPlace_frontend"
+    },
+    "internet_identity": {
+      "candid": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity.did",
+      "frontend": {},
+      "remote": {
+        "id": {
+          "ic": "rdmx6-jaaaa-aaaaa-aaadq-cai"
+        }
+      },
+      "type": "custom",
+      "wasm": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity_dev.wasm.gz"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}

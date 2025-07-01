@@ -1,0 +1,20 @@
+
+type Asset = record {
+    id: nat64;
+    name: text;
+    description: text;
+    creator: principal;
+    owner: principal;
+    price: nat64;
+    for_sale: bool;
+    image: text;
+};
+
+service : {
+    greet: (text) -> (text) query;
+    create_asset: (text, text, nat64, text) -> (Asset);
+    list_assets: () -> (vec Asset) query;
+    buy_asset: (nat64) -> (variant { Ok: Asset; Err: text });
+    list_for_sale: (nat64, nat64) -> (variant { Ok: Asset; Err: text });
+    delete_asset: (nat64) -> (variant { Ok: null; Err: text });
+}

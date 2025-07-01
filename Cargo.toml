@@ -1,0 +1,5 @@
+[workspace]
+members = [
+    "src/VR_MarketPlace_backend"
+]
+resolver = "2"
