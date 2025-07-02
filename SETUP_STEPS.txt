@@ -1,0 +1,151 @@
+# VR_MarketPlace Setup Guide
+
+This guide will help you set up and run the VR_MarketPlace project from scratch on any computer, even if you have no prior experience with DFINITY or the Internet Computer.
+
+---
+
+## 1. Prerequisites
+
+- **Node.js** (v16 or higher) and **npm** (v7 or higher)
+- **DFX SDK** (Internet Computer SDK)
+- **Git**
+
+### Install Node.js and npm
+- Download from https://nodejs.org/
+
+### Install DFX SDK
+- Run the following in your terminal:
+  ```bash
+  sh -ci "$(curl -fsSL https://internetcomputer.org/install.sh)"
+  ```
+- After install, restart your terminal and run:
+  ```bash
+  dfx --version
+  ```
+
+### Install Git
+- Download from https://git-scm.com/
+
+---
+
+## 2. Clone the Repository
+```bash
+git clone <your-repo-url>
+cd VR_MarketPlace
+```
+
+---
+
+## 3. Install Dependencies
+```bash
+npm install
+cd src/VR_MarketPlace_frontend
+npm install
+cd ../..
+```
+
+---
+
+## 4. Set Up Environment Variables
+
+Create a `.env` file in `src/VR_MarketPlace_frontend/` with the following content:
+
+```
+VITE_INTERNET_IDENTITY_CANISTER_ID=<your_internet_identity_canister_id>
+VITE_DFX_NETWORK=local
+```
+
+- After first deploy, update `<your_internet_identity_canister_id>` with the value from the output of:
+  ```bash
+  dfx canister id internet_identity
+  ```
+- Example:
+  ```
+  VITE_INTERNET_IDENTITY_CANISTER_ID=vg3po-ix777-77774-qaafa-cai
+  VITE_DFX_NETWORK=local
+  ```
+
+---
+
+## 5. Start the Local Replica
+```bash
+dfx start --clean --background
+```
+
+---
+
+## 6. Deploy Canisters
+```bash
+dfx deploy
+```
+
+- This will create and deploy all canisters (backend, frontend, and Internet Identity).
+- After deploy, run:
+  ```bash
+  dfx canister id internet_identity
+  ```
+  and update your `.env` file as described above if needed.
+
+---
+
+## 7. Build and Start the Frontend
+```bash
+cd src/VR_MarketPlace_frontend
+npm run build
+npm run start
+```
+- The app will be available at the URL shown in the terminal (e.g., http://localhost:3000 or http://localhost:3001).
+
+---
+
+## 8. Access the App
+- Open your browser and go to the frontend URL (e.g., http://localhost:3000).
+- Click **Login** to authenticate with Internet Identity.
+
+---
+
+## 9. Troubleshooting
+- If you see a canister not found error for Internet Identity, make sure your `.env` file has the correct `VITE_INTERNET_IDENTITY_CANISTER_ID` from `dfx canister id internet_identity`.
+- If ports are in use, try stopping all dfx/node processes or use a different port for the frontend.
+- If you change the `.env` file, always rebuild the frontend (`npm run build`).
+
+---
+
+## 10. Candid ID Changes
+- If you redeploy or reset your local dfx environment, the Internet Identity canister ID may change.
+- Always update the `.env` file in `src/VR_MarketPlace_frontend/` with the new canister ID after running:
+  ```bash
+  dfx canister id internet_identity
+  ```
+- Then rebuild and restart the frontend.
+
+---
+
+## 11. Clean Up (Optional)
+- To reset everything:
+  ```bash
+  dfx stop
+  dfx start --clean --background
+  dfx deploy
+  # Update .env as above
+  cd src/VR_MarketPlace_frontend
+  npm run build
+  npm run start
+  ```
+
+---
+
+## 12. Summary of Steps
+1. Install Node.js, npm, DFX, and Git
+2. Clone the repo
+3. Run `npm install` in root and frontend
+4. Create `.env` in frontend and set canister ID
+5. Start dfx: `dfx start --clean --background`
+6. Deploy: `dfx deploy`
+7. Update `.env` with correct canister ID
+8. Build and start frontend
+9. Open the app in your browser
+
+---
+
+You are now ready to use the VR_MarketPlace project on any machine!
