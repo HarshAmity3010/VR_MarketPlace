@@ -204,9 +204,10 @@ function App() {
     try {
       if (!actor) throw new Error('Not ready');
       const priceRupees = prompt('Enter new price in rupees:');
-      if (!priceRupees) return;
-      const priceICP = Math.round(Number(priceRupees) / 500);
-      const res = await actor.list_for_sale(id, priceICP);
+      if (!priceRupees) { setLoading(false); return; }
+      const price = Number(priceRupees);
+      if (isNaN(price) || price < 0) { setError('Invalid price.'); setLoading(false); return; }
+      const res = await actor.list_for_sale(id, price);
       if ('Ok' in res) {
         setSuccess('Asset listed for sale!');
         fetchAssets();
