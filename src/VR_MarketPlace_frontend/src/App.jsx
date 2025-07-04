@@ -142,7 +142,9 @@ function App() {
     setLoading(true);
     try {
       if (!actor) throw new Error('Not ready');
-      await actor.create_asset(form.name, form.description, Number(form.price), form.image || '');
+      // Send price in rupees directly
+      const priceRupees = Number(form.price);
+      await actor.create_asset(form.name, form.description, priceRupees, form.image || '');
       setSuccess('Asset created!');
       setForm({ name: '', description: '', price: '', image: '' });
       setImagePreview('');
@@ -201,9 +203,10 @@ function App() {
     setLoading(true);
     try {
       if (!actor) throw new Error('Not ready');
-      const price = prompt('Enter new price:');
-      if (!price) return;
-      const res = await actor.list_for_sale(id, Number(price));
+      const priceRupees = prompt('Enter new price in rupees:');
+      if (!priceRupees) return;
+      const priceICP = Math.round(Number(priceRupees) / 500);
+      const res = await actor.list_for_sale(id, priceICP);
       if ('Ok' in res) {
         setSuccess('Asset listed for sale!');
         fetchAssets();
@@ -226,7 +229,6 @@ function App() {
     <div className="container">
       <header className="header-pro sleek-header">
         <div className="header-left">
-          <img src="/logo2.svg" alt="ICP Logo" className="logo-pro small-logo" />
           <h1 className="main-title">ICP VR <span className="highlight">Marketplace</span></h1>
         </div>
         <div className="header-right">
@@ -259,8 +261,8 @@ function App() {
                     <input id="description" name="description" placeholder="Enter description" value={form.description} onChange={handleInput} required />
                   </div>
                   <div className="form-group-sleek">
-                    <label htmlFor="price">Price (ICP)</label>
-                    <input id="price" name="price" type="number" min="0" step="1" placeholder="Enter price" value={form.price} onChange={handleInput} required />
+                    <label htmlFor="price">Price (₹ Rupees)</label>
+                    <input id="price" name="price" type="number" min="0" step="1" placeholder="Enter price in rupees" value={form.price} onChange={handleInput} required />
                   </div>
                   <div className="form-group-sleek">
                     <label htmlFor="image">Image</label>
@@ -296,7 +298,9 @@ function App() {
                       const assetOwner = asset.owner?.toString?.() ?? asset.owner;
                       const assetCreator = asset.creator?.toString?.() ?? asset.creator;
                       const isOwner = assetOwner === principal;
-                      const priceRs = asset.price ? (Number(asset.price) * 500).toLocaleString('en-IN') : '-';
+                      const priceRs = (asset.price !== undefined && asset.price !== null)
+                        ? Number(asset.price).toLocaleString('en-IN')
+                        : '-';
                       return (
                         <div className="asset-card" key={asset.id}>
                           <div className="asset-image-row">
@@ -345,7 +349,9 @@ function App() {
                       const assetOwner = asset.owner?.toString?.() ?? asset.owner;
                       const assetCreator = asset.creator?.toString?.() ?? asset.creator;
                       const isOwner = assetOwner === principal;
-                      const priceRs = asset.price ? (Number(asset.price) * 500).toLocaleString('en-IN') : '-';
+                      const priceRs = (asset.price !== undefined && asset.price !== null)
+                        ? Number(asset.price).toLocaleString('en-IN')
+                        : '-';
                       return (
                         <div className="asset-list-row" key={asset.id}>
                           <div className="asset-list-img">
@@ -393,9 +399,6 @@ function App() {
           </section>
         </div>
       </main>
-      <footer>
-        <p>Powered by ICP & Rust | VR Marketplace &copy; 2025</p>
-      </footer>
     </div>
   );
 }

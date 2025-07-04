@@ -40,7 +40,7 @@ pub struct Asset {
     pub description: String,
     pub creator: Principal,
     pub owner: Principal,
-    pub price: u64, // in cycles or tokens
+    pub price: u64, // in rupees
     pub for_sale: bool,
     pub image: String, // base64-encoded image
 }
@@ -55,8 +55,9 @@ fn greet(name: String) -> String {
     format!("Hello, {}! Welcome to the ICP VR Marketplace!", name)
 }
 
+/// Create a new asset. Price is in rupees.
 #[ic_cdk::update]
-fn create_asset(name: String, description: String, price: u64, image: String) -> Asset {
+fn create_asset(name: String, description: String, price_rupees: u64, image: String) -> Asset {
     let creator = caller();
     let asset = ASSETS.with(|assets| {
         NEXT_ASSET_ID.with(|next_id| {
@@ -68,7 +69,7 @@ fn create_asset(name: String, description: String, price: u64, image: String) ->
                 description: description.clone(),
                 creator,
                 owner: creator,
-                price,
+                price: price_rupees,
                 for_sale: true,
                 image: image.clone(),
             };
@@ -107,8 +108,9 @@ fn buy_asset(asset_id: u64) -> Result<Asset, String> {
     })
 }
 
+/// List asset for sale. Price is in rupees.
 #[ic_cdk::update]
-fn list_for_sale(asset_id: u64, price: u64) -> Result<Asset, String> {
+fn list_for_sale(asset_id: u64, price_rupees: u64) -> Result<Asset, String> {
     let user = caller();
     ASSETS.with(|assets| {
         let mut assets = assets.borrow_mut();
@@ -117,7 +119,7 @@ fn list_for_sale(asset_id: u64, price: u64) -> Result<Asset, String> {
                 return Err("Only the owner can list the asset for sale".to_string());
             }
             asset.for_sale = true;
-            asset.price = price;
+            asset.price = price_rupees;
             Ok(asset.clone())
         } else {
             Err("Asset not found".to_string())
